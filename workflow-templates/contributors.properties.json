@@ -1,0 +1,8 @@
+{
+    "name": "Auto-add contributors",
+    "description": "A Github Action to add contributors to your markdown file(i.e. README.md) automatically on schedule or triggered by events",
+    "iconName": "contributors",
+    "filePatterns": [
+        "^README.md$"
+    ]
+}
