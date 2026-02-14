@@ -1,0 +1,19 @@
+name: Reusable Proof HTML
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        description: Directory to validate
+        required: false
+        type: string
+        default: ./
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anishathalye/proof-html@v2
+        with:
+          directory: ${{ inputs.directory }}

@@ -1,0 +1,8 @@
+{
+  "name": "Auto assign issues and PRs",
+  "description": "Automatically assign a default user when a new issue or pull request is opened",
+  "iconName": "contributors",
+  "categories": [
+    "Automation"
+  ]
+}

@@ -1,0 +1,29 @@
+name: Reusable Auto Assign
+
+on:
+  workflow_call:
+    inputs:
+      assignees:
+        description: Comma-separated list of default assignees
+        required: false
+        type: string
+        default: baxyz
+      numOfAssignee:
+        description: Number of assignees to pick
+        required: false
+        type: number
+        default: 1
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Auto-assign issue or pull request
+        uses: pozil/auto-assign-issue@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: ${{ inputs.assignees }}
+          numOfAssignee: ${{ inputs.numOfAssignee }}

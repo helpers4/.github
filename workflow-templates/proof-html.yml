@@ -1,0 +1,9 @@
+name: Proof HTML
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    uses: helpers4/.github/.github/workflows/reusable-proof-html.yml@main
+    with:
+      directory: ./

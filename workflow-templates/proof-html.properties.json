@@ -1,0 +1,8 @@
+{
+  "name": "Proof HTML",
+  "description": "Validate links in HTML files",
+  "iconName": "contributors",
+  "categories": [
+    "Continuous integration"
+  ]
+}
