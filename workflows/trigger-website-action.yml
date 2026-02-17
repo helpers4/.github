@@ -1,0 +1,34 @@
+name: Trigger Website Update - Action Release
+
+on:
+  repository_dispatch:
+    types: [release]
+  workflow_dispatch:
+
+jobs:
+  notify-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version
+        id: version
+        run: |
+          # Get version from git tag or dispatch
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=${VERSION:-${{ github.event.client_payload.version }}}" >> $GITHUB_OUTPUT
+
+      - name: Trigger website update
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.HELPERS4_WEBSITE_TOKEN }}
+          script: |
+            github.rest.repos.createDispatchEvent({
+              owner: 'helpers4',
+              repo: 'helpers4.github.io',
+              event_type: 'action-release',
+              client_payload: {
+                version: '${{ steps.version.outputs.version }}',
+                repository: 'action',
+                triggered_at: new Date().toISOString()
+              }
+            });
+            console.log('✅ Website update triggered for version ${{ steps.version.outputs.version }}');
