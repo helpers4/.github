@@ -1,48 +1,23 @@
-# AGENTS.md - AI Coding Agent Instructions
-
-This file provides context and guidelines for AI coding agents (GitHub Copilot, Claude, etc.) working on helpers4 repositories.
+# AGENTS.md - Organization Governance
 
 ## ⛔ CRITICAL RESTRICTIONS
 
-### Forbidden Actions
 - **NEVER execute `git push`** - The user will push manually after review
 - **NEVER use GPT models** - Use Claude models only (claude-sonnet-4, Claude Opus 4.5)
+- **Everything in English** - Code, comments, commits, documentation, logs, PR descriptions
 
-### Model Restriction Rationale
-Claude models have shown consistent behavior with this codebase's coding conventions and TypeScript strict mode requirements. GPT models are not preferred for this project.
+## Organization Context
 
-## Organization Overview
+**helpers4** is a collection of open-source utilities across 5 repos: `typescript`, `devcontainer`, `action`, `website`, `.github` (this repo). All licensed AGPL-3.0.
 
-**helpers4** is a collection of open-source utilities:
-- **typescript**: Tree-shakable TypeScript utility functions (12+ categories)
-- **devcontainer**: Development container features for consistent environments
-- **action**: GitHub Actions for automation and CI/CD workflows
-- **website**: Documentation and landing page
-
-## General Principles
-
-### Code Style
-- Use TypeScript with strict mode enabled
-- Avoid `any` type - use `unknown` or specific types instead
-- Include JSDoc comments with `@param`, `@returns`, `@example`
-- Use 2-space indentation
-- Use single quotes for strings
-- Prefer descriptive variable and function names
-
-### Commit Messages
+## Commit Messages
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/) with a gitmoji between the scope and the description.
 
 **Format:** `<type>(<scope>): <emoji> <description>`
 
-**Examples:**
-- `feat(workflows): ✨ add release automation`
-- `docs(governance): 📝 update contributing guide`
-- `chore(CI-CD): 🔧 bump action versions`
-
 **Scopes:** governance, workflows, CI-CD, templates
 
-**Types:**
 | Emoji | Type | Description |
 |-------|------|-------------|
 | ✨ | feat | New feature |
@@ -57,117 +32,61 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/) with a gitmo
 | 📦 | build | Build system |
 | ⏪ | revert | Revert |
 
-### Testing
+**Examples:**
+- `feat(workflows): ✨ add release automation`
+- `docs(governance): 📝 update contributing guide`
+- `chore(CI-CD): 🔧 bump action versions`
 
-- Add tests for new features
-- Ensure all tests pass locally
-- Use the test framework specified in each repository
-- Aim for good coverage on critical paths
+---
 
-### Documentation
+## This Repository
 
-- Update README for user-facing changes
-- Add/update comments for complex logic
-- Update CHANGELOG if provided
+**Purpose:** Organization-level GitHub configuration — shared workflows, issue/PR templates, and cross-repo automation. This is a special `.github` repository (GitHub reads it for org-wide defaults).
 
-## Repository-Specific Guidelines
+### Project Structure
 
-### TypeScript (`helpers4/typescript`)
-
-**Purpose**: Utility functions organized by category (array, date, object, promise, string, etc.)
-
-**Tech Stack**:
-- Node.js >= 24.0.0
-- TypeScript 5.x
-- Vite + Rollup for builds
-- Vitest for testing
-- oxlint for linting
-
-**Key Rules**:
-- Tree-shakable exports only
-- One helper function per file
-- Tests colocated (`.test.ts` or `.spec.ts`)
-- Each category has `index.ts` for re-exports
-- License header required on all source files
-
-**Commands**:
-```bash
-pnpm test              # Run tests
-pnpm build             # Build all packages
-pnpm typecheck         # TypeScript check
-pnpm lint              # Lint with oxlint
+```
+.github/
+├── workflows/
+│   ├── auto-assign.yml                  # Auto-assign issues/PRs to @baxyz
+│   ├── trigger-website-typescript.yml   # Notify website on TS release
+│   ├── trigger-website-devcontainer.yml # Notify website on DC release
+│   └── trigger-website-action.yml       # Notify website on Action release
+├── ISSUE_TEMPLATE/                      # Org-wide issue templates
+├── PULL_REQUEST_TEMPLATE.md             # Org-wide PR template
+├── AGENTS.md                            # This file
+├── LICENSE                              # AGPL-3.0
+└── .vscode/settings.json
 ```
 
-### DevContainer (`helpers4/devcontainer`)
+### Workflows
 
-**Purpose**: Development container features for consistent dev environments
+**auto-assign.yml:**
+- Triggers on issues/PRs opened
+- Auto-assigns to @baxyz
+- Adds 'triage' label to issues
+- Uses `actions/github-script@v7`
 
-**Tech Stack**:
-- Docker-based dev containers
-- Various feature packages (typescript-dev, vite-plus, git-absorb, etc.)
+**trigger-website-*.yml** (3 similar workflows):
+- Purpose: Cross-repo notification when a release happens
+- Trigger: `repository_dispatch` or `workflow_dispatch`
+- Flow: Extract version from tag → send `createDispatchEvent()` to website repo
+- Payload includes version + source repo info
+- Requires secret: `HELPERS4_WEBSITE_TOKEN` (cross-repo GitHub token with `repo` scope)
 
-**Key Files**:
-- `devcontainer-feature.json` - Feature metadata
-- `install.sh` - Feature installation script
-- `test.sh` - Feature tests
+### Cross-Repo Release Pipeline
 
-### Action (`helpers4/action`)
+```
+typescript release → trigger-website-typescript.yml → website rebuilds TS docs
+devcontainer release → trigger-website-devcontainer.yml → website rebuilds DC docs
+action release → trigger-website-action.yml → website rebuilds Action docs
+```
 
-**Purpose**: GitHub Actions for workflow automation
+### Important Notes
 
-**Key Files**:
-- `action.yml` - Action metadata
-- `scripts/` - Implementation scripts
-- `README.md` - Usage documentation
-
-### Website (`helpers4/website`)
-
-**Purpose**: Documentation portals and landing page
-
-**Tech Stack**:
-- Qwik (landing page)
-- Docusaurus (documentation portals)
-- Vite for builds
-
-**Sections**:
-- `/`: Landing page
-- `/ts`: TypeScript documentation
-- `/dev-container`: DevContainer documentation
-- `/action`: GitHub Actions documentation
-
-## Common Tasks
-
-### Adding a Feature
-1. Create your changes
-2. Add tests
-3. Follow commit conventions
-4. Ensure tests pass locally
-5. Create clear PR description
-
-### Fixing a Bug
-1. Identify root cause
-2. Write minimal fix
-3. Add test case for the bug
-4. Verify no regressions
-
-### Updating Documentation
-1. Keep changes accurate and current
-2. Use clear, concise language
-3. Include code examples where helpful
-4. Test links and examples
-
-## Contributing Owners
-
-- **@baxyz** - Organization owner and maintainer
-
-## Important Notes
-
-- **Open communication**: Ask questions in issues/PRs if unclear
-- **Test locally**: Always verify changes work locally first
-- **Review existing code**: Understand patterns before implementing
-- **Backward compatibility**: Consider implications for existing users
-- **Type safety**: Maintain strong typing across the project
-
+- Workflows must exist in `main` branch to run
+- Dispatch events are async — website doesn't auto-update immediately
+- `HELPERS4_WEBSITE_TOKEN` must have `repo` scope for cross-repo dispatch
 ## Repository Links
 
 - TypeScript: https://github.com/helpers4/typescript
