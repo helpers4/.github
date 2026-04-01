@@ -8,7 +8,7 @@
 
 ## Organization Context
 
-**helpers4** is a collection of open-source utilities across 5 repos: `typescript`, `devcontainer`, `action`, `website`, `.github` (this repo). All licensed AGPL-3.0.
+**helpers4** is a collection of open-source utilities across 5 repos: `typescript`, `devcontainer`, `action`, `website`, `.github` (this repo). All licensed LGPL-3.0.
 
 ## Commit Messages
 
@@ -55,7 +55,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/) with a gitmo
 ├── ISSUE_TEMPLATE/                      # Org-wide issue templates
 ├── PULL_REQUEST_TEMPLATE.md             # Org-wide PR template
 ├── AGENTS.md                            # This file
-├── LICENSE                              # AGPL-3.0
+├── LICENSE                              # LGPL-3.0
 └── .vscode/settings.json
 ```
 
