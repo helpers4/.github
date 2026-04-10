@@ -1,34 +1,28 @@
-name: Trigger Website Update - Action Release
+name: Trigger Website Update - Action
 
+# Manual trigger to force a website rebuild for GitHub Action docs.
+# Normally triggered automatically by the action repo's release workflow.
 on:
-  repository_dispatch:
-    types: [release]
   workflow_dispatch:
 
 jobs:
-  notify-website:
+  trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract version
-        id: version
-        run: |
-          # Get version from git tag or dispatch
-          VERSION=${GITHUB_REF#refs/tags/}
-          echo "version=${VERSION:-${{ github.event.client_payload.version }}}" >> $GITHUB_OUTPUT
+      - name: Get Trigganator token
+        id: trigganator
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.TRIGGANATOR_ID }}
+          private-key: ${{ secrets.TRIGGANATOR_KEY }}
+          owner: helpers4
+          repositories: website
 
       - name: Trigger website update
-        uses: actions/github-script@v7
+        uses: peter-evans/repository-dispatch@v4
         with:
-          github-token: ${{ secrets.HELPERS4_WEBSITE_TOKEN }}
-          script: |
-            github.rest.repos.createDispatchEvent({
-              owner: 'helpers4',
-              repo: 'helpers4.github.io',
-              event_type: 'action-release',
-              client_payload: {
-                version: '${{ steps.version.outputs.version }}',
-                repository: 'action',
-                triggered_at: new Date().toISOString()
-              }
-            });
-            console.log('✅ Website update triggered for version ${{ steps.version.outputs.version }}');
+          token: ${{ steps.trigganator.outputs.token }}
+          repository: helpers4/website
+          event-type: action-release
+          client-payload: '{"version": "latest"}'
+      - run: echo "✅ Website update triggered for Action docs"
