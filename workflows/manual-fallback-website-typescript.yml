@@ -1,7 +1,8 @@
-name: Trigger Website Update - TypeScript
+name: Manual Fallback - Trigger Website Update (TypeScript)
 
-# Manual trigger to force a website rebuild for TypeScript docs.
-# Normally triggered automatically by the typescript repo's release workflow.
+# Manual fallback only.
+# Primary automatic trigger lives in helpers4/typescript/.github/workflows/release.yml.
+# Use this workflow to force a website docs regeneration for a specific TypeScript version.
 on:
   workflow_dispatch:
     inputs:
@@ -14,11 +15,16 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
+      - name: Manual fallback notice
+        run: |
+          echo "ℹ️ This workflow is a manual fallback."
+          echo "ℹ️ Normal website updates are triggered automatically by typescript release."
+
       - name: Get Trigganator token
         id: trigganator
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ vars.TRIGGANATOR_ID }}
+          client-id: ${{ vars.TRIGGANATOR_ID }}
           private-key: ${{ secrets.TRIGGANATOR_KEY }}
           owner: helpers4
           repositories: website
@@ -29,5 +35,7 @@ jobs:
           token: ${{ steps.trigganator.outputs.token }}
           repository: helpers4/website
           event-type: typescript-release
-          client-payload: '{"version": "${{ inputs.version }}"}'
-      - run: echo "✅ Website update triggered for TypeScript v${{ inputs.version }}"
+          client-payload: "{\"version\": \"${{ inputs.version }}\"}"
+
+      - name: Summary
+        run: echo "✅ Website update triggered for TypeScript v${{ inputs.version }}"

@@ -49,9 +49,9 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/) with a gitmo
 .github/
 ├── workflows/
 │   ├── auto-assign.yml                  # Auto-assign issues/PRs to @baxyz
-│   ├── trigger-website-typescript.yml   # Notify website on TS release
-│   ├── trigger-website-devcontainer.yml # Notify website on DC release
-│   └── trigger-website-action.yml       # Notify website on Action release
+│   ├── manual-fallback-website-typescript.yml   # Manual fallback: force TS website update
+│   ├── manual-fallback-website-devcontainer.yml # Manual fallback: force DC website update
+│   └── manual-fallback-website-action.yml       # Manual fallback: force Action website update
 ├── ISSUE_TEMPLATE/                      # Org-wide issue templates
 ├── PULL_REQUEST_TEMPLATE.md             # Org-wide PR template
 ├── AGENTS.md                            # This file
@@ -67,26 +67,28 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/) with a gitmo
 - Adds 'triage' label to issues
 - Uses `actions/github-script@v7`
 
-**trigger-website-*.yml** (3 similar workflows):
-- Purpose: Cross-repo notification when a release happens
-- Trigger: `repository_dispatch` or `workflow_dispatch`
-- Flow: Extract version from tag → send `createDispatchEvent()` to website repo
-- Payload includes version + source repo info
-- Requires secret: `HELPERS4_WEBSITE_TOKEN` (cross-repo GitHub token with `repo` scope)
+**manual-fallback-website-*.yml** (3 similar workflows):
+- Purpose: Manual fallback to force website updates when needed
+- Trigger: `workflow_dispatch` only
+- Flow: Operator-triggered dispatch to website repo
+- Payload includes version/source context used by website workflows
+- Auth: GitHub App token via `TRIGGANATOR_ID` + `TRIGGANATOR_KEY`
 
 ### Cross-Repo Release Pipeline
 
 ```
-typescript release → trigger-website-typescript.yml → website rebuilds TS docs
-devcontainer release → trigger-website-devcontainer.yml → website rebuilds DC docs
-action release → trigger-website-action.yml → website rebuilds Action docs
+typescript release (in typescript repo) → website rebuilds TS docs
+devcontainer release (in devcontainer repo) → website rebuilds DC docs
+action release (in action repo) → website rebuilds Action docs
+manual-fallback-website-*.yml (in .github repo) → force rerun when automatic flow fails
 ```
 
 ### Important Notes
 
 - Workflows must exist in `main` branch to run
 - Dispatch events are async — website doesn't auto-update immediately
-- `HELPERS4_WEBSITE_TOKEN` must have `repo` scope for cross-repo dispatch
+- Automatic dispatch source of truth is each source repository release workflow
+- `.github` manual-fallback workflows are for recovery / force-rerun only
 ## Repository Links
 
 - TypeScript: https://github.com/helpers4/typescript
