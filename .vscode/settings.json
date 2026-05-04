@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "governance",
     "workflows",
+    "deps",
     "CI-CD",
     "templates"
   ]
