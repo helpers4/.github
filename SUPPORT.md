@@ -4,7 +4,7 @@
 
 - **Bug reports**: [Open an issue](https://github.com/helpers4/.github/issues/new?template=bug_report.md) on the relevant repository
 - **Questions**: Use [GitHub Discussions](https://github.com/orgs/helpers4/discussions) or open an issue
-- **Documentation**: Visit [helpers4.github.io](https://helpers4.github.io)
+- **Documentation**: Visit [helpers4.dev](https://helpers4.dev)
 
 ## Projects
 
