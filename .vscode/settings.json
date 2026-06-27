@@ -1,14 +1,1 @@
-{
-  "conventionalCommits.scopes": [
-    "governance",
-    "workflows",
-    "deps",
-    "CI-CD",
-    "templates"
-  ],
-  "github.copilot.chat.commitMessageGeneration.instructions": [
-    {
-      "file": ".vscode/copilot-commit.md"
-    }
-  ]
-}
+{}
