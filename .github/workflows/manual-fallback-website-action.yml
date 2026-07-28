@@ -9,6 +9,9 @@ on:
 jobs:
   trigger:
     runs-on: ubuntu-latest
+    # No checkout, no GITHUB_TOKEN use — the composite action mints its own token via the
+    # GitHub App credentials passed in `with:`, so the default token needs zero permissions here.
+    permissions: {}
     steps:
       - name: Manual fallback notice
         run: |
