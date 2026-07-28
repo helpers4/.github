@@ -45,7 +45,7 @@ capitalize('hello world');  // "Hello world"
 chunk([1, 2, 3, 4, 5], 2); // [[1, 2], [3, 4], [5]]
 ```
 
-Available categories: `array` · `date` · `function` · `number` · `object` · `observable` · `promise` · `string` · `type` · `url` · `version` — or install everything with `@helpers4/all`.
+Available categories: `array` · `ci` · `color` · `commit` · `date` · `function` · `guard` · `id` · `map` · `markdown` · `node` · `number` · `object` · `observable` · `promise` · `set` · `string` · `type` · `url` · `version` — or install everything with `@helpers4/all`.
 
 📖 [helpers4.dev/typescript](https://helpers4.dev/typescript)
 
@@ -71,7 +71,7 @@ Production-ready DevContainer Features published to GHCR. Drop them into any `de
 }
 ```
 
-Available features: `essential-dev` · `github-dev` · `typescript-dev` · `vite-plus` · `angular-dev` · `package-auto-install` · `pnpm-store` · `git-absorb` · `dotfiles-sync` · `auto-header` · `shell-history-per-project`
+Available features: `essential-dev` · `github-dev` · `typescript-dev` · `angular-dev` · `vite-plus` · `package-auto-install` · `pnpm-store` · `git-absorb` · `dotfiles-sync` · `auto-header` · `shell-history-per-project` · `claude-dev` · `copilot-dev` · `mistral-dev` · `peon-ping`
 
 📖 [helpers4.dev/devcontainer](https://helpers4.dev/devcontainer)
 
