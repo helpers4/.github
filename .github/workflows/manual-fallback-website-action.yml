@@ -19,8 +19,10 @@ jobs:
           echo "ℹ️ Normal website updates are triggered automatically by action release."
 
       - name: Trigger website update
-        uses: helpers4/action/trigger-website-update@main
+        uses: helpers4/action/dispatch-with-fallback@main
         with:
+          target-owner: helpers4
+          target-repo: website
           event-type: action-release
           payload: '{"version": "latest"}'
           app-id: ${{ vars.TRIGGANATOR_ID }}
