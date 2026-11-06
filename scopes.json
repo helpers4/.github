@@ -1,7 +1,8 @@
 [
-  "governance",
+  "ai",
   "workflows",
   "deps",
-  "CI-CD",
-  "templates"
+  "ci",
+  "templates",
+  "docs"
 ]
